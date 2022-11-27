@@ -8,6 +8,7 @@ interface ArticleApiService {
     @GET("news")
     fun getNews(
         @Query("categories") category: String,
+        @Query("keywords") keywords: String,
         @Query("offset") offset: Int,
-    ) : ResponseAPIModel
+    ): ResponseAPIModel
 }

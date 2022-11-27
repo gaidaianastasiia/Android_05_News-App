@@ -8,7 +8,7 @@ import javax.inject.Inject
 class ArticleRepositoryImpl @Inject constructor(
     private val articleApiService: ArticleApiService,
 ) : ArticleRepository {
-    override suspend fun getNews(category: String, offset: Int): List<Article> {
-        return articleApiService.getNews(category, offset).articles.mapToDomainList()
+    override suspend fun getNews(category: String, keywords: String, offset: Int): List<Article> {
+        return articleApiService.getNews(category, keywords, offset).articles.mapToDomainList()
     }
 }
