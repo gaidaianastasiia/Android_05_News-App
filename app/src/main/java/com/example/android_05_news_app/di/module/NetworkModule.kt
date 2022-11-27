@@ -1,7 +1,7 @@
 package com.example.android_05_news_app.di.module
 
 import com.example.android_05_news_app.BuildConfig
-import com.example.android_05_news_app.data.network.ArticlesApiService
+import com.example.android_05_news_app.data.network.ArticleApiService
 import com.example.android_05_news_app.data.network.interceptor.QueryInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -16,16 +16,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Singleton
     @Provides
-    fun provideArticlesApiService(okHttpClient: OkHttpClient): ArticlesApiService {
+    fun provideArticlesApiService(okHttpClient: OkHttpClient): ArticleApiService {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.NEWS_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .client(okHttpClient)
             .build()
-            .create(ArticlesApiService::class.java)
+            .create(ArticleApiService::class.java)
     }
 
     @Singleton
