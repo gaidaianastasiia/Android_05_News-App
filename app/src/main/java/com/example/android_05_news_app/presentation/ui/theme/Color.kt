@@ -1,4 +1,4 @@
-package com.example.android_05_news_app.ui.theme
+package com.example.android_05_news_app.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
