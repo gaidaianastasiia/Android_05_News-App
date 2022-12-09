@@ -16,8 +16,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "String", "NEWS_URL", '"http://api.mediastack.com/v1/"'
-        buildConfigField "String", "NEWS_URL_TOKEN", '"c080286500eab98559542e5b1e94c751"'
+        buildConfigField "String", "NEWS_URL", '"https://newsapi.org/v2/"'
+        buildConfigField "String", "NEWS_URL_TOKEN", '"c5b4c41095d644d2814bdd232bbed4cf"'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -71,6 +71,14 @@ dependencies {
     implementation "androidx.compose.material:material-icons-core:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    implementation "com.google.accompanist:accompanist-flowlayout:0.28.0"
+
+    debugImplementation "androidx.compose.ui:ui-tooling:1.3.1"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.3.1"
+
+
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+
     def hilt = "2.44"
     implementation "com.google.dagger:hilt-android:$hilt"
     kapt "com.google.dagger:hilt-android-compiler:$hilt"
@@ -81,6 +89,7 @@ dependencies {
 
     def okhttp_version = "4.10.0"
     implementation"com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

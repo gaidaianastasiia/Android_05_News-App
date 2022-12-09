@@ -1,13 +1,15 @@
 package com.example.android_05_news_app.data.network.response
 
-import com.example.android_05_news_app.data.network.model.ArticleAPIModel
-import com.example.android_05_news_app.data.network.model.PaginationAPIModel
+import com.example.android_05_news_app.data.network.model.PostAPIModel
 import com.google.gson.annotations.SerializedName
 
 data class ResponseAPIModel(
-    @SerializedName("pagination")
-    val pagination: PaginationAPIModel,
+    @SerializedName("status")
+    val status: String,
 
-    @SerializedName("data")
-    val articles: List<ArticleAPIModel>,
+    @SerializedName("totalResults")
+    val totalResults: Int,
+
+    @SerializedName("articles")
+    val postsList: List<PostAPIModel>,
 )

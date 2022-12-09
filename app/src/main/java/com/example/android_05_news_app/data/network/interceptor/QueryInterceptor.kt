@@ -7,7 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
 
-private const val DEFAULT_LANGUAGE = "en"
+private const val DEFAULT_COUNTRY = "us"
 
 class QueryInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -15,8 +15,8 @@ class QueryInterceptor @Inject constructor() : Interceptor {
         val originalHttpUrl: HttpUrl = original.url
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("access_key", BuildConfig.NEWS_URL_TOKEN)
-            .addQueryParameter("languages", DEFAULT_LANGUAGE)
+            .addQueryParameter("apiKey", BuildConfig.NEWS_URL_TOKEN)
+            .addQueryParameter("country", DEFAULT_COUNTRY)
             .build()
 
 

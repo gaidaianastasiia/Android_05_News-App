@@ -2,18 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_graph"
-    app:startDestination="@id/newsListFragment">
-
+    app:startDestination="@id/homeFragment2">
     <fragment
-        android:id="@+id/newsListFragment"
-        android:name="com.example.android_05_news_app.presentation.news_list.NewsListFragment"
-        android:label="NewsListFragment" >
+        android:id="@+id/homeFragment2"
+        android:name="com.example.android_05_news_app.presentation.home.HomeFragment"
+        android:label="HomeFragment" >
         <action
-            android:id="@+id/viewArticle"
-            app:destination="@id/articleFragment" />
+            android:id="@+id/action_homeFragment2_to_postFragment2"
+            app:destination="@id/postFragment2" />
     </fragment>
     <fragment
-        android:id="@+id/articleFragment"
-        android:name="com.example.android_05_news_app.presentation.article.ArticleFragment"
-        android:label="ArticleFragment" />
+        android:id="@+id/postFragment2"
+        android:name="com.example.android_05_news_app.presentation.post.PostFragment"
+        android:label="PostFragment" />
 </navigation>
