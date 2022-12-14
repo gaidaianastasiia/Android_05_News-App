@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
                     },
                     onExecuteSearch = {
                         viewModel.handleIntent(
-                            HomeIntent.OnExecuteSearch()
+                            HomeIntent.OnExecuteSearch
                         )
                     },
                     onSelectedCategoryChanged = { selectedCategory ->
@@ -55,6 +55,11 @@ class HomeFragment : Fragment() {
                             HomeIntent.OnSelectedCategoryChanged(selectedCategory)
                         )
                     },
+                    OnScrollPostsListListener = { index ->
+                        viewModel.handleIntent(
+                            HomeIntent.OnScrollPostsListListener(index)
+                        )
+                    }
                 )
             }
         }

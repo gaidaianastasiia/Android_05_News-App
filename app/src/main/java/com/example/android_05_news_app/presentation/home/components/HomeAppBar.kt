@@ -1,5 +1,6 @@
 package com.example.android_05_news_app.presentation.home.components
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +13,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -39,6 +44,7 @@ fun HomeAppBar(
         elevation = 8.dp,
     ) {
         Column {
+
             Row(modifier = Modifier.fillMaxWidth()) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 val focusManager = LocalFocusManager.current
@@ -48,7 +54,8 @@ fun HomeAppBar(
                         .fillMaxWidth()
                         .padding(start = 8.dp, end = 8.dp, top = 8.dp),
                     value = searchInput,
-                    onValueChange = { onSearchInputChanged(it)},
+                    singleLine = true,
+                    onValueChange = { onSearchInputChanged(it) },
                     label = { Text(text = stringResource(R.string.home_search)) },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
