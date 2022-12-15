@@ -2,7 +2,6 @@ package com.example.android_05_news_app.di.module
 
 import com.example.android_05_news_app.BuildConfig
 import com.example.android_05_news_app.data.network.PostsApiService
-import com.example.android_05_news_app.data.network.interceptor.ErrorInterceptor
 import com.example.android_05_news_app.data.network.interceptor.QueryInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -31,13 +30,9 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(
-        queryInterceptor: QueryInterceptor,
-        errorInterceptor: ErrorInterceptor
-    ): OkHttpClient {
+    fun provideOkHttpClient(queryInterceptor: QueryInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(queryInterceptor)
-            .addInterceptor(errorInterceptor)
             .addInterceptor(
                 HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY)

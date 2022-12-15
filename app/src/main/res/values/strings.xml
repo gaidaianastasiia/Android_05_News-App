@@ -4,4 +4,5 @@
     <!-- Home Screen -->
     <string name="home_search">Search news</string>
     <string name="home_empty_state_message">News not found</string>
+    <string name="home_error_message">Oops! Something went wrong</string>
 </resources>

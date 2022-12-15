@@ -3,6 +3,7 @@ package com.example.android_05_news_app.presentation.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android_05_news_app.R
 import com.example.android_05_news_app.domain.interactor.GetPostsFeedInteractor
 import com.example.android_05_news_app.domain.interactor.SearchPostsInteractor
 import com.example.android_05_news_app.domain.model.NewsCategories
@@ -135,7 +136,8 @@ class HomeViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                _event.emit(HomeEvent.ShowError(e.message))
+                _state.value = _state.value.copy(isLoading = false)
+                _event.emit(HomeEvent.ShowError(R.string.home_error_message))
             }
         }
     }
@@ -152,7 +154,8 @@ class HomeViewModel @Inject constructor(
                     setPostsList(postsList)
                 }
             } catch (e: Exception) {
-                _event.emit(HomeEvent.ShowError(e.message))
+                _state.value = _state.value.copy(isLoading = false)
+                _event.emit(HomeEvent.ShowError(R.string.home_error_message))
             }
         }
     }

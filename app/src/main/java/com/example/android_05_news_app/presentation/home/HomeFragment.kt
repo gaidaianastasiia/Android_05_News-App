@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,12 +28,15 @@ class HomeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val localContext = LocalContext.current
+
                 LaunchedEffect(Unit) {
                     viewModel.event.collect {
-
                         when (it) {
                             is HomeEvent.ShowError -> {
-                                //show toast
+                                Toast.makeText(
+                                    localContext, it.errorMessage, Toast.LENGTH_LONG)
+                                    .show()
                             }
                         }
                     }
