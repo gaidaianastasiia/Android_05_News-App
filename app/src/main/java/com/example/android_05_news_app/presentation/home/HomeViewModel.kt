@@ -3,6 +3,8 @@ package com.example.android_05_news_app.presentation.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+//import androidx.navigation.Navigation.findNavController
+import androidx.navigation.*
 import com.example.android_05_news_app.R
 import com.example.android_05_news_app.domain.interactor.GetPostsFeedInteractor
 import com.example.android_05_news_app.domain.interactor.SearchPostsInteractor
@@ -69,6 +71,11 @@ class HomeViewModel @Inject constructor(
             }
             is HomeIntent.OnExecuteSearch -> {
                 onExecuteSearch()
+            }
+            is HomeIntent.OnNavigateToPostDetail -> {
+                viewModelScope.launch {
+                    _event.emit(HomeEvent.NavigateToPostDetail(homeIntent.post))
+                }
             }
         }
     }

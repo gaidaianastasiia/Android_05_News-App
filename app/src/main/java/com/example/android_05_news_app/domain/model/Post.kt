@@ -1,8 +1,9 @@
 package com.example.android_05_news_app.domain.model
 
-import androidx.compose.runtime.Stable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@Stable
+@Parcelize
 data class Post(
     val author: String?,
     val title: String?,
@@ -11,4 +12,4 @@ data class Post(
     val urlToImage: String?,
     val published_at: String?,
     val content: String?,
-)
+) : Parcelable

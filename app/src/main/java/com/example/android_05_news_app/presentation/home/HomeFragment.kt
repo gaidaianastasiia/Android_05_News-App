@@ -14,7 +14,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import com.example.android_05_news_app.R
 import dagger.hilt.android.AndroidEntryPoint
+
+const val POST_ARGS_KEY = "postArgsKey"
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -38,6 +42,11 @@ class HomeFragment : Fragment() {
                                     localContext, it.errorMessage, Toast.LENGTH_LONG)
                                     .show()
                             }
+                            is HomeEvent.NavigateToPostDetail -> {
+                                val bundle = Bundle()
+                                bundle.putParcelable(POST_ARGS_KEY, it.post)
+                                findNavController().navigate(R.id.viewPost, bundle)
+                            }
                         }
                     }
                 }
@@ -46,6 +55,7 @@ class HomeFragment : Fragment() {
                 HomeScreenContent(
                     state = state,
                     onSearchInputChanged = { searchInput ->
+                        findNavController()
                         viewModel.handleIntent(
                             HomeIntent.OnSearchInputChanged(searchInput)
                         )
@@ -63,6 +73,11 @@ class HomeFragment : Fragment() {
                     OnScrollPostsListListener = { index ->
                         viewModel.handleIntent(
                             HomeIntent.OnScrollPostsListListener(index)
+                        )
+                    },
+                    onPostsListItemClick = { post ->
+                        viewModel.handleIntent(
+                            HomeIntent.OnNavigateToPostDetail(post)
                         )
                     }
                 )

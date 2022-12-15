@@ -8,7 +8,7 @@
         android:name="com.example.android_05_news_app.presentation.home.HomeFragment"
         android:label="HomeFragment" >
         <action
-            android:id="@+id/action_homeFragment2_to_postFragment2"
+            android:id="@+id/viewPost"
             app:destination="@id/postFragment2" />
     </fragment>
     <fragment

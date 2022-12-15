@@ -14,6 +14,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import com.example.android_05_news_app.domain.model.NewsCategories
+import com.example.android_05_news_app.domain.model.Post
 import com.example.android_05_news_app.presentation.components.CircularProgress
 import com.example.android_05_news_app.presentation.home.components.HomeAppBar
 import com.example.android_05_news_app.presentation.home.components.HomeEmptyState
@@ -27,6 +28,7 @@ fun HomeScreenContent(
     onExecuteSearch: () -> Unit,
     onSelectedCategoryChanged: (NewsCategories) -> Unit,
     OnScrollPostsListListener: (Int) -> Unit,
+    onPostsListItemClick: (post: Post) -> Unit,
 ) {
     val scaffoldState = rememberScaffoldState()
     val focusManager = LocalFocusManager.current
@@ -59,7 +61,8 @@ fun HomeScreenContent(
         if (state.postsList.isNotEmpty()) {
             PostsList(
                 postsList = state.postsList,
-                onScrollListener = OnScrollPostsListListener
+                onScrollListener = OnScrollPostsListListener,
+                onPostsListItemClick = onPostsListItemClick,
             )
         }
     }
