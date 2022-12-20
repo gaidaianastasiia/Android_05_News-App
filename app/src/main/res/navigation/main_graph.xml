@@ -2,17 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_graph"
-    app:startDestination="@id/homeFragment2">
+    app:startDestination="@id/homeFragment">
     <fragment
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:name="com.example.android_05_news_app.presentation.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/viewPost"
-            app:destination="@id/postFragment2" />
+            app:destination="@id/postFragment" />
     </fragment>
     <fragment
-        android:id="@+id/postFragment2"
+        android:id="@+id/postFragment"
         android:name="com.example.android_05_news_app.presentation.post.PostFragment"
-        android:label="PostFragment" />
+        android:label="PostFragment" >
+        <action
+            android:id="@+id/viewHome"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

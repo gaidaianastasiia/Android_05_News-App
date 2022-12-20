@@ -55,7 +55,6 @@ class HomeFragment : Fragment() {
                 HomeScreenContent(
                     state = state,
                     onSearchInputChanged = { searchInput ->
-                        findNavController()
                         viewModel.handleIntent(
                             HomeIntent.OnSearchInputChanged(searchInput)
                         )

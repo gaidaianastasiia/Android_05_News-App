@@ -9,9 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.android_05_news_app.domain.model.NewsCategories
-import com.example.android_05_news_app.presentation.home.HomeState
 import com.example.android_05_news_app.presentation.model.Category
-import com.example.android_05_news_app.presentation.ui.theme.Purple200
+import com.example.android_05_news_app.presentation.ui.theme.Blue300
 
 @Composable
 fun NewsCategoryChip(
@@ -22,7 +21,7 @@ fun NewsCategoryChip(
         modifier = Modifier.padding(top = 8.dp, end = 8.dp),
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium,
-        color = if (category.isSelected) Purple200 else MaterialTheme.colors.primary
+        color = if (category.isSelected) Blue300 else MaterialTheme.colors.primary
     ) {
         Row(modifier = Modifier
             .toggleable(

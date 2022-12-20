@@ -1,8 +1,20 @@
 <resources>
     <string name="app_name">Android_05_News-App</string>
+    <string name="app_title">News</string>
+    <string name="post_image_description">Post Image</string>
+
+    <!--  Post  -->
+    <string name="post_default_title">The title is not available</string>
+    <string name="post_default_author">The author name is not available</string>
+    <string name="post_default_content">The content is not available</string>
 
     <!-- Home Screen -->
     <string name="home_search">Search news</string>
     <string name="home_empty_state_message">News not found</string>
     <string name="home_error_message">Oops! Something went wrong</string>
+
+    <!--  Post Details Screen  -->
+    <string name="post_navigation_icon_description">Navigate up</string>
+    <string name="post_source_link_text">Read more…</string>
+
 </resources>

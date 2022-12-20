@@ -11,17 +11,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.android_05_news_app.domain.model.Post
 import com.example.android_05_news_app.utils.DEFAULT_NEWS_IMAGE
 import com.example.android_05_news_app.utils.loadPicture
+import com.example.android_05_news_app.R
+
 
 @Composable
 fun PostCard(
     post: Post,
-     onPostClick: (post: Post) -> Unit,
+    onPostClick: (post: Post) -> Unit,
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
@@ -31,7 +33,7 @@ fun PostCard(
             .clickable(
                 onClick = { onPostClick(post) }
             ),
-        ) {
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -49,7 +51,7 @@ fun PostCard(
                 image?.let { img ->
                     Image(
                         bitmap = img.asImageBitmap(),
-                        contentDescription = "Recipe Featured Image",
+                        contentDescription = stringResource(R.string.post_image_description),
                         modifier = Modifier
                             .fillMaxHeight(),
                         contentScale = ContentScale.Fit,
@@ -57,10 +59,10 @@ fun PostCard(
                 }
             }
             Column() {
-                    Text(
-                        text = post.title ?: "Title",
-                        fontSize = 16.sp
-                    )
+                Text(
+                    text = post.title ?: stringResource(R.string.post_default_title),
+                    fontSize = 16.sp
+                )
             }
         }
 
