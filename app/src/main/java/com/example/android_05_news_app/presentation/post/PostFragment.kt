@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import com.example.android_05_news_app.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
