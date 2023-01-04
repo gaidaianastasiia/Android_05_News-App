@@ -1,4 +1,4 @@
-package com.example.android_05_news_app.utils
+package com.example.android_05_news_app.presentation.utils
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -36,27 +36,6 @@ fun loadPicture(url: String?, @DrawableRes defaultImage: Int): MutableState<Bitm
     Glide.with(LocalContext.current)
         .asBitmap()
         .load(url)
-        .into(object : CustomTarget<Bitmap>() {
-            override fun onLoadCleared(placeholder: Drawable?) {}
-            override fun onResourceReady(
-                resource: Bitmap,
-                transition: Transition<in Bitmap>?,
-            ) {
-                bitmapState.value = resource
-            }
-        })
-
-    return bitmapState
-}
-
-@Composable
-fun loadPicture(@DrawableRes drawable: Int): MutableState<Bitmap?> {
-
-    val bitmapState: MutableState<Bitmap?> = remember { mutableStateOf(null) }
-
-    Glide.with(LocalContext.current)
-        .asBitmap()
-        .load(drawable)
         .into(object : CustomTarget<Bitmap>() {
             override fun onLoadCleared(placeholder: Drawable?) {}
             override fun onResourceReady(

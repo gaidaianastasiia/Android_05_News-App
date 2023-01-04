@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -28,10 +27,10 @@ import androidx.compose.ui.unit.sp
 import com.example.android_05_news_app.R
 import com.example.android_05_news_app.presentation.ui.theme.Blue800
 import com.example.android_05_news_app.presentation.ui.theme.NewsTheme
-import com.example.android_05_news_app.utils.DEFAULT_NEWS_IMAGE
-import com.example.android_05_news_app.utils.loadPicture
+import com.example.android_05_news_app.presentation.utils.DEFAULT_NEWS_IMAGE
+import com.example.android_05_news_app.presentation.utils.loadPicture
 
-private val DEFAULT_SPACER_SIZE = 16.dp
+private val DEFAULT_SPACER_SIZE = 8.dp
 private const val POST_SOURCE_LINK_STRING_ANNOTATION_TAG = "URL"
 
 @Composable
@@ -65,7 +64,7 @@ private fun PostScreenContent(
                 onBack = onBack,
                 scrollBehavior = scrollBehavior,
             )
-        }
+        },
     ) { innerPadding ->
         val state = rememberScrollState()
         PostContent(
@@ -87,22 +86,23 @@ private fun TopAppBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Row {
-                Text(
-                    text = stringResource(R.string.app_title),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+            Text(
+                text = stringResource(R.string.app_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
         },
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(imageVector = Icons.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.post_navigation_icon_description),
-                    tint = MaterialTheme.colorScheme.primary)
+                    tint = MaterialTheme.colorScheme.onPrimary)
             }
         },
         scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary
+        ),
     )
 }
 
@@ -112,49 +112,40 @@ private fun PostContent(
     modifier: Modifier = Modifier,
     onGoToPostSourceClick: (String) -> Unit,
 ) {
-    Column(
-        modifier = modifier.padding(DEFAULT_SPACER_SIZE)
-    ) {
+    Column(modifier = modifier.padding(DEFAULT_SPACER_SIZE)) {
         PostHeaderImage(post)
         Spacer(Modifier.height(DEFAULT_SPACER_SIZE))
         PostTitle(post)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(DEFAULT_SPACER_SIZE))
         PostSubtitle(post)
         PostMetadata(post, Modifier.padding(bottom = 24.dp))
         PostContent(post)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(DEFAULT_SPACER_SIZE))
         PostSource(post, onGoToPostSourceClick)
     }
 }
 
 @Composable
 private fun PostHeaderImage(post: Post) {
-    val image = loadPicture(
-        url = post.urlToImage,
-        defaultImage = DEFAULT_NEWS_IMAGE
-    ).value
+    val image = loadPicture(url = post.urlToImage, defaultImage = DEFAULT_NEWS_IMAGE).value
 
     val imageModifier = Modifier
-        .height(180.dp)
+        .heightIn(min = 180.dp)
         .fillMaxWidth()
         .clip(shape = MaterialTheme.shapes.medium)
 
     image?.let { img ->
-        Image(
-            bitmap = img.asImageBitmap(),
+        Image(bitmap = img.asImageBitmap(),
             contentDescription = stringResource(R.string.post_image_description),
             modifier = imageModifier,
-            contentScale = ContentScale.Crop
-        )
+            contentScale = ContentScale.Crop)
     }
 }
 
 @Composable
 private fun PostTitle(post: Post) {
-    Text(
-        text = post.title ?: stringResource(R.string.post_default_title),
-        style = MaterialTheme.typography.headlineLarge
-    )
+    Text(text = post.title ?: stringResource(R.string.post_default_title),
+        style = MaterialTheme.typography.headlineMedium)
 }
 
 @Composable
@@ -184,7 +175,7 @@ private fun PostMetadata(
             colorFilter = ColorFilter.tint(LocalContentColor.current),
             contentScale = ContentScale.Fit,
         )
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(DEFAULT_SPACER_SIZE))
         Text(
             text = post.author ?: stringResource(R.string.post_default_author),
             style = MaterialTheme.typography.labelLarge,
@@ -212,27 +203,20 @@ private fun PostSource(
         val postSourceLinkText = buildAnnotatedString {
             val str = stringResource(R.string.post_source_link_text)
             append(str)
-            addStringAnnotation(
-                tag = POST_SOURCE_LINK_STRING_ANNOTATION_TAG,
+            addStringAnnotation(tag = POST_SOURCE_LINK_STRING_ANNOTATION_TAG,
                 annotation = url,
                 start = 0,
-                end = str.length
-            )
+                end = str.length)
         }
 
-        ClickableText(
-            style = MaterialTheme.typography.labelLarge.copy(
-                color = Blue800,
-                textDecoration = TextDecoration.Underline,
-            ),
-            text = postSourceLinkText,
-            onClick = {
-                postSourceLinkText
-                    .getStringAnnotations(POST_SOURCE_LINK_STRING_ANNOTATION_TAG, it, it)
-                    .firstOrNull()?.let { stringAnnotation ->
-                        onGoToPostSourceClick(stringAnnotation.item)
-                    }
-            }
-        )
+        ClickableText(style = MaterialTheme.typography.labelLarge.copy(
+            color = Blue800,
+            textDecoration = TextDecoration.Underline,
+        ), text = postSourceLinkText, onClick = {
+            postSourceLinkText.getStringAnnotations(POST_SOURCE_LINK_STRING_ANNOTATION_TAG, it, it)
+                .firstOrNull()?.let { stringAnnotation ->
+                    onGoToPostSourceClick(stringAnnotation.item)
+                }
+        })
     }
 }

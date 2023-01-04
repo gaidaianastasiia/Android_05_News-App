@@ -1,11 +1,8 @@
 package com.example.android_05_news_app.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-//import androidx.navigation.Navigation.findNavController
-import androidx.navigation.*
 import com.example.android_05_news_app.R
 import com.example.android_05_news_app.domain.interactor.GetPostsFeedInteractor
 import com.example.android_05_news_app.domain.interactor.SearchPostsInteractor
@@ -47,7 +44,7 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(
         HomeState(
             isLoading = true,
-            emptyState = false,
+            isEmptyState = false,
             postsList = emptyList(),
             categoriesList = getInitialCategoriesList(),
             searchInput = savedStateHandle[StateKey.SEARCH_INPUT] ?: EMPTY_SEARCH_INPUT,
@@ -81,41 +78,12 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onScrollPostsList(scrollPosition: Int) {
-        if (scrollPosition >= ((PAGE_SIZE * currentPage) - PAGINATION_OFFSET)) {
-            setCurrentPage(currentPage + 1)
-            val category = currentCategory
-
-            if (category == null) {
-                searchPosts(_state.value.searchInput, currentPage)
-            } else {
-                getPosts(category.value, currentPage)
-            }
-        }
-    }
-
-    private fun onCategoryChanged(category: NewsCategories) {
-        resetCurrentPage()
-        resetPostsList()
-        setSearchInput(EMPTY_SEARCH_INPUT)
-        updateCategoryList(category)
-        getPosts(category.value, currentPage)
-    }
-
-    private fun onSearchInputChanged(searchInput: String) {
-        setSearchInput(searchInput)
-    }
-
-    private fun onExecuteSearch() {
-        val searchInput = _state.value.searchInput
-
-        if (searchInput.isNotEmpty()) {
-            resetCurrentPage()
-            resetPostsList()
-            updateCategoryList(null)
-            searchPosts(searchInput, currentPage)
-        } else {
-            _state.value = _state.value.copy(isLoading = false)
+    private fun getInitialCategoriesList(): List<Category> {
+        return NewsCategories.values().map { category ->
+            Category(
+                name = category,
+                isSelected = category == currentCategory
+            )
         }
     }
 
@@ -168,12 +136,41 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getInitialCategoriesList(): List<Category> {
-        return NewsCategories.values().map { category ->
-            Category(
-                name = category,
-                isSelected = category == currentCategory
-            )
+    private fun onScrollPostsList(scrollPosition: Int) {
+        if (scrollPosition >= ((PAGE_SIZE * currentPage) - PAGINATION_OFFSET)) {
+            setCurrentPage(currentPage + 1)
+            val category = currentCategory
+
+            if (category == null) {
+                searchPosts(_state.value.searchInput, currentPage)
+            } else {
+                getPosts(category.value, currentPage)
+            }
+        }
+    }
+
+    private fun onCategoryChanged(category: NewsCategories) {
+        resetCurrentPage()
+        resetPostsList()
+        setSearchInput(EMPTY_SEARCH_INPUT)
+        updateCategoryList(category)
+        getPosts(category.value, currentPage)
+    }
+
+    private fun onSearchInputChanged(searchInput: String) {
+        setSearchInput(searchInput)
+    }
+
+    private fun onExecuteSearch() {
+        val searchInput = _state.value.searchInput
+
+        if (searchInput.isNotEmpty()) {
+            resetCurrentPage()
+            resetPostsList()
+            updateCategoryList(null)
+            searchPosts(searchInput, currentPage)
+        } else {
+            _state.value = _state.value.copy(isLoading = false)
         }
     }
 
@@ -197,7 +194,7 @@ class HomeViewModel @Inject constructor(
     private fun resetPostsList() {
         _state.value = _state.value.copy(
             isLoading = true,
-            emptyState = false,
+            isEmptyState = false,
             postsList = emptyList()
         )
     }
@@ -214,7 +211,7 @@ class HomeViewModel @Inject constructor(
     private fun setEmptyState() {
         _state.value = _state.value.copy(
             isLoading = false,
-            emptyState = true,
+            isEmptyState = true,
         )
     }
 

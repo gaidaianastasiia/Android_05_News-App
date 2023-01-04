@@ -2,12 +2,12 @@ package com.example.android_05_news_app.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Blue300 = Color(0xFF64B5F6)
-val Blue400 = Color(0xFF42A5F5)
-val Blue500 = Color(0xFF2196F3)
-val Blue600 = Color(0xFF1E88E5)
-val Blue700 = Color(0xFF1976D2)
-val Blue800 = Color(0xFF1565C0)
+val Blue300 = Color(0xFF8e71f3)
+val Blue400 = Color(0xFF7051f1)
+val Blue500 = Color(0xff4b30ed)
+val Blue600 = Color(0xff3c2ce7)
+val Blue700 = Color(0xFF1c24de)
+val Blue800 = Color(0xFF001ed8)
 
 val Teal300 = Color(0xFF1AC6FF)
 

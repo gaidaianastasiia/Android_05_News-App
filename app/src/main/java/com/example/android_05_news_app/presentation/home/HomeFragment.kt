@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
                 }
 
                 val state by viewModel.state.collectAsState()
-                HomeScreenContent(
+                HomeScreen(
                     state = state,
                     onSearchInputChanged = { searchInput ->
                         viewModel.handleIntent(

@@ -13,5 +13,5 @@ import javax.inject.Singleton
 interface RepositoryModule {
     @Singleton
     @Binds
-    fun bindArticleRepository(postsRepositoryImpl: PostsRepositoryImpl): PostsRepository
+    fun bindPostsRepository(postsRepositoryImpl: PostsRepositoryImpl): PostsRepository
 }
