@@ -18,4 +18,4 @@ This app contains two screens: a list of articles and a detail page for articles
 9. Material 3
 
 ## References
-API: [https://newsapi.org/] ( https://newsapi.org/)
+API: [https://newsapi.org/]( https://newsapi.org/)
