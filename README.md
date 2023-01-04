@@ -8,3 +8,14 @@ This app contains two screens: a list of articles and a detail page for articles
 
 ## Used technologies
 1. Kotlin
+2. MVI
+3. Single Activity Architecture
+4. Jetpack Compose
+5. Hilt
+6. Navigation Components
+7. Retrofit2
+8. Coroutines
+9. Material 3
+
+## References
+API: [https://newsapi.org/] ( https://newsapi.org/)
