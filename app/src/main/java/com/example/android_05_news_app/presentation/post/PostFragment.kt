@@ -31,7 +31,7 @@ class PostFragment : Fragment() {
                     viewModel.event.collect {
                         when (it) {
                             is PostEvent.NavigateToHome -> {
-                                findNavController().navigate(R.id.viewHome)
+                                findNavController().popBackStack()
                             }
                             is PostEvent.NavigateToPostSource -> {
                                 uriHandler.openUri(it.url)
