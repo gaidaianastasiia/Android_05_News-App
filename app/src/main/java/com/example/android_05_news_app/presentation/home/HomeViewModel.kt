@@ -30,15 +30,13 @@ class HomeViewModel @Inject constructor(
     private val getPostsInteractor: GetPostsInteractor,
     private val searchPostsInteractor: SearchPostsInteractor,
     private val savedStateHandle: SavedStateHandle,
-) : BaseViewModel<HomeEvent, HomeState, HomeIntent>(
-    HomeState(
-        isLoading = true,
-        isEmptyState = false,
-        postsList = emptyList(),
-        categoriesList = emptyList(),
-        searchInput = savedStateHandle[StateKey.SEARCH_INPUT] ?: EMPTY_SEARCH_INPUT,
-    )
-) {
+) : BaseViewModel<HomeEvent, HomeState, HomeIntent>(HomeState(
+    isLoading = true,
+    isEmptyState = false,
+    postsList = emptyList(),
+    categoriesList = emptyList(),
+    searchInput = savedStateHandle[StateKey.SEARCH_INPUT] ?: EMPTY_SEARCH_INPUT,
+)) {
     private var searchRequestJob: Job? = null
     private var currentPage = savedStateHandle[StateKey.PAGE] ?: DEFAULT_PAGE_NUMBER
     private var currentCategory: NewsCategory? =
@@ -65,10 +63,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getInitialCategoriesList(): List<Category> {
         return NewsCategory.values().map { category ->
-            Category(
-                name = category,
-                isSelected = category == currentCategory
-            )
+            Category(name = category, isSelected = category == currentCategory)
         }
     }
 
@@ -171,20 +166,13 @@ class HomeViewModel @Inject constructor(
 
     private fun setPostsList(postsList: List<Post>) {
         changeState {
-            copy(
-                isLoading = false,
-                postsList = postsList
-            )
+            copy(isLoading = false, postsList = postsList)
         }
     }
 
     private fun resetPostsList() {
         changeState {
-            copy(
-                isLoading = true,
-                isEmptyState = false,
-                postsList = emptyList()
-            )
+            copy(isLoading = true, isEmptyState = false, postsList = emptyList())
         }
     }
 
@@ -192,10 +180,7 @@ class HomeViewModel @Inject constructor(
         val updatedList = _state.value.postsList.toMutableList()
         updatedList.addAll(newPostsList)
         changeState {
-            copy(
-                isLoading = false,
-                postsList = updatedList
-            )
+            copy(isLoading = false, postsList = updatedList)
         }
     }
 

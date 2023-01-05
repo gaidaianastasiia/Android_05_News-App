@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-abstract class BaseViewModel<E, S, in I>(initialState: S) : ViewModel() {
+abstract class BaseViewModel<E : UiEvent, S : UiState, in I : UiIntent>(initialState: S) :
+    ViewModel() {
     private val stateMutex: Mutex = Mutex()
 
     protected val _event: MutableSharedFlow<E> = MutableSharedFlow()

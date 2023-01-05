@@ -17,8 +17,7 @@ class PostViewModel @Inject constructor(
             ?: throw  IllegalArgumentException("Post can't be null")
     )
 ) {
-
-   override fun handleIntent(intent: PostIntent) {
+    override fun handleIntent(intent: PostIntent) {
         when (intent) {
             is PostIntent.OnBackButtonClick -> {
                 viewModelScope.launch {

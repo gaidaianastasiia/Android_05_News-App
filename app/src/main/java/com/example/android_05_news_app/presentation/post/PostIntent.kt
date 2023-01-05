@@ -1,6 +1,8 @@
 package com.example.android_05_news_app.presentation.post
 
-sealed class PostIntent {
+import com.example.android_05_news_app.presentation.base.UiIntent
+
+sealed class PostIntent : UiIntent {
     object OnBackButtonClick : PostIntent()
     data class OnGoToPostSourceClick(val url : String) : PostIntent()
 }
