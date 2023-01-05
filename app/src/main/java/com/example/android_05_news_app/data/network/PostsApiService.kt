@@ -1,6 +1,6 @@
 package com.example.android_05_news_app.data.network
 
-import com.example.android_05_news_app.data.network.response.ResponseAPIModel
+import com.example.android_05_news_app.data.network.model.ResponseAPIModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 

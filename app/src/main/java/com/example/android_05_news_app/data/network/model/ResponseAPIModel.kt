@@ -1,6 +1,5 @@
-package com.example.android_05_news_app.data.network.response
+package com.example.android_05_news_app.data.network.model
 
-import com.example.android_05_news_app.data.network.model.PostAPIModel
 import com.google.gson.annotations.SerializedName
 
 data class ResponseAPIModel(

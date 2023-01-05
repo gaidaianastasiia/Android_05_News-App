@@ -14,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import com.example.android_05_news_app.domain.model.Post
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -24,11 +24,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.android_05_news_app.R
 import com.example.android_05_news_app.presentation.ui.theme.Blue800
 import com.example.android_05_news_app.presentation.ui.theme.NewsTheme
-import com.example.android_05_news_app.presentation.utils.DEFAULT_NEWS_IMAGE
-import com.example.android_05_news_app.presentation.utils.loadPicture
 
 private val DEFAULT_SPACER_SIZE = 8.dp
 private const val POST_SOURCE_LINK_STRING_ANNOTATION_TAG = "URL"
@@ -127,19 +126,16 @@ private fun PostContent(
 
 @Composable
 private fun PostHeaderImage(post: Post) {
-    val image = loadPicture(url = post.urlToImage, defaultImage = DEFAULT_NEWS_IMAGE).value
-
-    val imageModifier = Modifier
-        .heightIn(min = 180.dp)
-        .fillMaxWidth()
-        .clip(shape = MaterialTheme.shapes.medium)
-
-    image?.let { img ->
-        Image(bitmap = img.asImageBitmap(),
-            contentDescription = stringResource(R.string.post_image_description),
-            modifier = imageModifier,
-            contentScale = ContentScale.Crop)
-    }
+    AsyncImage(
+        model = post.urlToImage ?: R.drawable.placeholder_image,
+        placeholder = painterResource(R.drawable.placeholder_image),
+        contentDescription = stringResource(R.string.post_image_description),
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .heightIn(min = 180.dp)
+            .fillMaxWidth()
+            .clip(shape = MaterialTheme.shapes.medium),
+    )
 }
 
 @Composable

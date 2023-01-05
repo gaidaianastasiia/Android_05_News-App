@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.sp
 import com.example.android_05_news_app.R
 import androidx.compose.material3.Typography
 
-
 private val Montserrat = FontFamily(
     Font(R.font.montserrat_regular),
     Font(R.font.montserrat_medium, FontWeight.W500)
@@ -28,8 +27,6 @@ val defaultTextStyle = TextStyle(
     )
 )
 
-
-// Set of Material typography styles to start with
 val NewsTypography = Typography(
     displayLarge = defaultTextStyle.copy(
         fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp

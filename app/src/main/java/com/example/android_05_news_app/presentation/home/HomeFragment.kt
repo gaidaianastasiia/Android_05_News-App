@@ -69,9 +69,9 @@ class HomeFragment : Fragment() {
                             HomeIntent.OnSelectedCategoryChanged(selectedCategory)
                         )
                     },
-                    OnScrollPostsListListener = { index ->
+                    onPostsListScrolled = { index ->
                         viewModel.handleIntent(
-                            HomeIntent.OnScrollPostsListListener(index)
+                            HomeIntent.OnPostsListScrolled(index)
                         )
                     },
                     onPostsListItemClick = { post ->

@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -29,16 +28,16 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.android_05_news_app.R
-import com.example.android_05_news_app.domain.model.NewsCategories
+import com.example.android_05_news_app.domain.model.NewsCategory
 import com.example.android_05_news_app.domain.model.Post
 import com.example.android_05_news_app.presentation.components.CircularProgress
 import com.example.android_05_news_app.presentation.components.EmptyState
 import com.example.android_05_news_app.presentation.model.Category
 import com.example.android_05_news_app.presentation.ui.theme.NewsTheme
-import com.example.android_05_news_app.presentation.utils.DEFAULT_NEWS_IMAGE
-import com.example.android_05_news_app.presentation.utils.loadPicture
 import com.google.accompanist.flowlayout.FlowRow
 import androidx.compose.material3.FilterChip
+import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 
 private val DEFAULT_SPACER_SIZE = 8.dp
 
@@ -47,8 +46,8 @@ fun HomeScreen(
     state: HomeState,
     onSearchInputChanged: (String) -> Unit,
     onExecuteSearch: () -> Unit,
-    onSelectedCategoryChanged: (NewsCategories) -> Unit,
-    OnScrollPostsListListener: (Int) -> Unit,
+    onSelectedCategoryChanged: (NewsCategory) -> Unit,
+    onPostsListScrolled: (Int) -> Unit,
     onPostsListItemClick: (post: Post) -> Unit,
 ) {
     NewsTheme {
@@ -57,7 +56,7 @@ fun HomeScreen(
             onSearchInputChanged = onSearchInputChanged,
             onExecuteSearch = onExecuteSearch,
             onSelectedCategoryChanged = onSelectedCategoryChanged,
-            OnScrollPostsListListener = OnScrollPostsListListener,
+            onPostsListScrolled = onPostsListScrolled,
             onPostsListItemClick = onPostsListItemClick,
         )
     }
@@ -69,8 +68,8 @@ private fun HomeScreenContent(
     state: HomeState,
     onSearchInputChanged: (String) -> Unit,
     onExecuteSearch: () -> Unit,
-    onSelectedCategoryChanged: (NewsCategories) -> Unit,
-    OnScrollPostsListListener: (Int) -> Unit,
+    onSelectedCategoryChanged: (NewsCategory) -> Unit,
+    onPostsListScrolled: (Int) -> Unit,
     onPostsListItemClick: (post: Post) -> Unit,
 ) {
     Scaffold(
@@ -88,7 +87,7 @@ private fun HomeScreenContent(
             isLoading = state.isLoading,
             isEmptyState = state.isEmptyState,
             postsList = state.postsList,
-            OnScrollPostsListListener = OnScrollPostsListListener,
+            onPostsListScrolled = onPostsListScrolled,
             onPostsListItemClick = onPostsListItemClick,
             modifier = Modifier.padding(innerPadding),
         )
@@ -101,7 +100,7 @@ private fun HomeTopBar(
     categoriesList: List<Category>,
     onSearchInputChanged: (String) -> Unit,
     onExecuteSearch: () -> Unit,
-    onSelectedCategoryChanged: (NewsCategories) -> Unit,
+    onSelectedCategoryChanged: (NewsCategory) -> Unit,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -174,7 +173,7 @@ private fun HomeSearch(
 @Composable
 private fun CategoryChip(
     category: Category,
-    onSelectedCategoryChanged: (NewsCategories) -> Unit,
+    onSelectedCategoryChanged: (NewsCategory) -> Unit,
 ) {
     FilterChip(
         selected = category.isSelected,
@@ -195,7 +194,7 @@ private fun HomeContent(
     isLoading: Boolean,
     isEmptyState: Boolean,
     postsList: List<Post>,
-    OnScrollPostsListListener: (Int) -> Unit,
+    onPostsListScrolled: (Int) -> Unit,
     onPostsListItemClick: (post: Post) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -208,7 +207,7 @@ private fun HomeContent(
     if (postsList.isNotEmpty()) {
         PostsList(
             postsList = postsList,
-            onScrollListener = OnScrollPostsListListener,
+            onScrollListener = onPostsListScrolled,
             onPostsListItemClick = onPostsListItemClick,
             modifier = modifier
         )
@@ -268,20 +267,17 @@ private fun PostCard(
                 .fillMaxWidth()
                 .padding(DEFAULT_SPACER_SIZE)
         ) {
-            val image =
-                loadPicture(url = post.urlToImage,
-                    defaultImage = DEFAULT_NEWS_IMAGE).value
-            image?.let { img ->
-                Image(
-                    bitmap = img.asImageBitmap(),
-                    contentDescription = stringResource(R.string.post_image_description),
-                    modifier = Modifier
-                        .fillMaxWidth(0.3f)
-                        .padding(end = DEFAULT_SPACER_SIZE)
-                        .fillMaxHeight(),
-                    contentScale = ContentScale.Fit,
+            AsyncImage(
+                model = post.urlToImage ?: R.drawable.placeholder_image,
+                placeholder = painterResource(R.drawable.placeholder_image),
+                contentDescription = stringResource(R.string.post_image_description),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .padding(end = DEFAULT_SPACER_SIZE)
+                    .fillMaxHeight(),
+
                 )
-            }
             Text(
                 text = post.title ?: stringResource(R.string.post_default_title),
                 style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 20.sp),

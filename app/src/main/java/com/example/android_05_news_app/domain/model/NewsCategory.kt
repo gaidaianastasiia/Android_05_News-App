@@ -10,8 +10,7 @@ object CategoriesApiKey {
     const val TECHNOLOGY_API_KEY = "technology"
 }
 
-
-enum class NewsCategories(val value: String) {
+enum class NewsCategory(val value: String) {
     GENERAL(CategoriesApiKey.GENERAL_API_KEY),
     BUSINESS(CategoriesApiKey.BUSINESS_API_KEY),
     ENTERTAINMENT(CategoriesApiKey.ENTERTAINMENT_API_KEY),

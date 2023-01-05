@@ -1,17 +1,16 @@
 package com.example.android_05_news_app.presentation.home
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_05_news_app.R
-import com.example.android_05_news_app.domain.interactor.GetPostsFeedInteractor
+import com.example.android_05_news_app.domain.interactor.GetPostsInteractor
 import com.example.android_05_news_app.domain.interactor.SearchPostsInteractor
-import com.example.android_05_news_app.domain.model.NewsCategories
+import com.example.android_05_news_app.domain.model.NewsCategory
 import com.example.android_05_news_app.domain.model.Post
+import com.example.android_05_news_app.presentation.base.BaseViewModel
 import com.example.android_05_news_app.presentation.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,63 +22,49 @@ object StateKey {
 
 private const val DEFAULT_PAGE_NUMBER = 1
 private const val PAGE_SIZE = 20
-private const val PAGINATION_OFFSET = 5
+private const val PAGINATION_OFFSET = 7
 private const val EMPTY_SEARCH_INPUT = ""
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPostsFeedInteractor: GetPostsFeedInteractor,
+    private val getPostsInteractor: GetPostsInteractor,
     private val searchPostsInteractor: SearchPostsInteractor,
     private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-
+) : BaseViewModel<HomeEvent, HomeState, HomeIntent>(
+    HomeState(
+        isLoading = true,
+        isEmptyState = false,
+        postsList = emptyList(),
+        categoriesList = emptyList(),
+        searchInput = savedStateHandle[StateKey.SEARCH_INPUT] ?: EMPTY_SEARCH_INPUT,
+    )
+) {
     private var searchRequestJob: Job? = null
     private var currentPage = savedStateHandle[StateKey.PAGE] ?: DEFAULT_PAGE_NUMBER
-    private var currentCategory: NewsCategories? =
-        savedStateHandle[StateKey.CURRENT_CATEGORY] ?: NewsCategories.GENERAL
-
-    private val _event = MutableSharedFlow<HomeEvent>()
-    val event = _event.asSharedFlow()
-
-    private val _state = MutableStateFlow(
-        HomeState(
-            isLoading = true,
-            isEmptyState = false,
-            postsList = emptyList(),
-            categoriesList = getInitialCategoriesList(),
-            searchInput = savedStateHandle[StateKey.SEARCH_INPUT] ?: EMPTY_SEARCH_INPUT,
-        )
-    )
-    val state = _state.asStateFlow()
+    private var currentCategory: NewsCategory? =
+        savedStateHandle[StateKey.CURRENT_CATEGORY] ?: NewsCategory.GENERAL
 
     init {
+        changeState { copy(categoriesList = getInitialCategoriesList()) }
         fetchPosts()
     }
 
-    fun handleIntent(homeIntent: HomeIntent) {
-        when (homeIntent) {
-            is HomeIntent.OnScrollPostsListListener -> {
-                onScrollPostsList(homeIntent.index)
-            }
-            is HomeIntent.OnSelectedCategoryChanged -> {
-                onCategoryChanged(homeIntent.category)
-            }
-            is HomeIntent.OnSearchInputChanged -> {
-                onSearchInputChanged(homeIntent.searchInput)
-            }
-            is HomeIntent.OnExecuteSearch -> {
-                onExecuteSearch()
-            }
+    override fun handleIntent(intent: HomeIntent) {
+        when (intent) {
+            is HomeIntent.OnPostsListScrolled -> onPostsListScrolled(intent.index)
+            is HomeIntent.OnSelectedCategoryChanged -> onCategoryChanged(intent.category)
+            is HomeIntent.OnSearchInputChanged -> onSearchInputChanged(intent.searchInput)
+            is HomeIntent.OnExecuteSearch -> onExecuteSearch()
             is HomeIntent.OnNavigateToPostDetail -> {
                 viewModelScope.launch {
-                    _event.emit(HomeEvent.NavigateToPostDetail(homeIntent.post))
+                    _event.emit(HomeEvent.NavigateToPostDetail(intent.post))
                 }
             }
         }
     }
 
     private fun getInitialCategoriesList(): List<Category> {
-        return NewsCategories.values().map { category ->
+        return NewsCategory.values().map { category ->
             Category(
                 name = category,
                 isSelected = category == currentCategory
@@ -103,7 +88,7 @@ class HomeViewModel @Inject constructor(
     private fun getPosts(category: String, page: Int) {
         viewModelScope.launch {
             try {
-                val postsList = getPostsFeedInteractor(category, page)
+                val postsList = getPostsInteractor(category, page)
 
                 if (page != DEFAULT_PAGE_NUMBER) {
                     appendPosts(postsList)
@@ -112,7 +97,7 @@ class HomeViewModel @Inject constructor(
                 }
 
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isLoading = false)
+                changeState { copy(isLoading = false) }
                 _event.emit(HomeEvent.ShowError(R.string.home_error_message))
             }
         }
@@ -130,13 +115,13 @@ class HomeViewModel @Inject constructor(
                     setPostsList(postsList)
                 }
             } catch (e: Exception) {
-                _state.value = _state.value.copy(isLoading = false)
+                changeState { copy(isLoading = false) }
                 _event.emit(HomeEvent.ShowError(R.string.home_error_message))
             }
         }
     }
 
-    private fun onScrollPostsList(scrollPosition: Int) {
+    private fun onPostsListScrolled(scrollPosition: Int) {
         if (scrollPosition >= ((PAGE_SIZE * currentPage) - PAGINATION_OFFSET)) {
             setCurrentPage(currentPage + 1)
             val category = currentCategory
@@ -149,7 +134,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onCategoryChanged(category: NewsCategories) {
+    private fun onCategoryChanged(category: NewsCategory) {
         resetCurrentPage()
         resetPostsList()
         setSearchInput(EMPTY_SEARCH_INPUT)
@@ -170,49 +155,57 @@ class HomeViewModel @Inject constructor(
             updateCategoryList(null)
             searchPosts(searchInput, currentPage)
         } else {
-            _state.value = _state.value.copy(isLoading = false)
+            changeState { copy(isLoading = false) }
         }
     }
 
-    private fun updateCategoryList(updatedCategory: NewsCategories?) {
+    private fun updateCategoryList(updatedCategory: NewsCategory?) {
         setCurrentCategory(updatedCategory)
 
         val updatedList = _state.value.categoriesList.map { category ->
             category.copy(isSelected = category.name == updatedCategory)
         }
 
-        _state.value = _state.value.copy(categoriesList = updatedList)
+        changeState { copy(categoriesList = updatedList) }
     }
 
     private fun setPostsList(postsList: List<Post>) {
-        _state.value = _state.value.copy(
-            isLoading = false,
-            postsList = postsList
-        )
+        changeState {
+            copy(
+                isLoading = false,
+                postsList = postsList
+            )
+        }
     }
 
     private fun resetPostsList() {
-        _state.value = _state.value.copy(
-            isLoading = true,
-            isEmptyState = false,
-            postsList = emptyList()
-        )
+        changeState {
+            copy(
+                isLoading = true,
+                isEmptyState = false,
+                postsList = emptyList()
+            )
+        }
     }
 
     private fun appendPosts(newPostsList: List<Post>) {
         val updatedList = _state.value.postsList.toMutableList()
         updatedList.addAll(newPostsList)
-        _state.value = _state.value.copy(
-            isLoading = false,
-            postsList = updatedList
-        )
+        changeState {
+            copy(
+                isLoading = false,
+                postsList = updatedList
+            )
+        }
     }
 
     private fun setEmptyState() {
-        _state.value = _state.value.copy(
-            isLoading = false,
-            isEmptyState = true,
-        )
+        changeState {
+            copy(
+                isLoading = false,
+                isEmptyState = true,
+            )
+        }
     }
 
     private fun setCurrentPage(page: Int) {
@@ -224,13 +217,13 @@ class HomeViewModel @Inject constructor(
         setCurrentPage(DEFAULT_PAGE_NUMBER)
     }
 
-    private fun setCurrentCategory(category: NewsCategories?) {
+    private fun setCurrentCategory(category: NewsCategory?) {
         currentCategory = category
         savedStateHandle[StateKey.CURRENT_CATEGORY] = category
     }
 
     private fun setSearchInput(searchInput: String) {
-        _state.value = _state.value.copy(searchInput = searchInput)
+        changeState { copy(searchInput = searchInput) }
         savedStateHandle[StateKey.SEARCH_INPUT] = searchInput
     }
 }
