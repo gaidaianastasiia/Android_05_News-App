@@ -64,6 +64,7 @@ private fun PostScreenContent(
                 scrollBehavior = scrollBehavior,
             )
         },
+        containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface,
     ) { innerPadding ->
         val state = rememberScrollState()
