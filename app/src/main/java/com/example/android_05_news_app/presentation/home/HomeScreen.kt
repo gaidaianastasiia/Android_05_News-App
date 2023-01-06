@@ -36,7 +36,9 @@ import com.example.android_05_news_app.presentation.model.Category
 import com.example.android_05_news_app.presentation.ui.theme.NewsTheme
 import com.google.accompanist.flowlayout.FlowRow
 import androidx.compose.material3.FilterChip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
 
 private val DEFAULT_SPACER_SIZE = 8.dp
@@ -82,6 +84,7 @@ private fun HomeScreenContent(
                 onSelectedCategoryChanged = onSelectedCategoryChanged,
             )
         },
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         HomeContent(
             isLoading = state.isLoading,
@@ -146,6 +149,9 @@ private fun HomeSearch(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = DEFAULT_SPACER_SIZE),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = MaterialTheme.colorScheme.onBackground
+        ),
         value = searchInput,
         singleLine = true,
         onValueChange = { onSearchInputChanged(it) },
@@ -180,10 +186,13 @@ private fun CategoryChip(
         label = {
             Text(
                 text = category.name.value,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleSmall.copy(letterSpacing = 0.8.sp),
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
         },
+        border = FilterChipDefaults.filterChipBorder(
+            borderColor = Color(0xFFFFFFFF)),
         modifier = Modifier.padding(end = 4.dp),
         onClick = { onSelectedCategoryChanged(category.name) }
     )
@@ -254,6 +263,8 @@ private fun PostCard(
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .padding(top = 12.dp)
             .fillMaxWidth()
@@ -281,6 +292,7 @@ private fun PostCard(
             Text(
                 text = post.title ?: stringResource(R.string.post_default_title),
                 style = MaterialTheme.typography.bodyLarge.copy(lineHeight = 20.sp),
+                color =MaterialTheme.colorScheme.onSurface,
             )
         }
     }
