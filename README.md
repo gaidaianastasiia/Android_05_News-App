@@ -3,7 +3,7 @@
 News App is a news reading app, built with Jetpack Compose. 
 
 ## Screenshots
-![This is an image](https://github.com/gaidaianastasiia/Android_05_News-App/blob/master/screenshots/Home_screen.png)
+![Screenshots](https://github.com/gaidaianastasiia/Android_05_News-App/blob/master/screenshots/Screens.png)
 
 ## Features
 This app contains two screens: a list of articles and a detail page for articles. You can select news by category or search news by a given query. The article details screen contains an excerpt of the article and a link to the source to read more.
