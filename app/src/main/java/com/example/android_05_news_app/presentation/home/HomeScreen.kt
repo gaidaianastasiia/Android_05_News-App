@@ -266,7 +266,7 @@ private fun PostCard(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onBackground),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
-            .padding(top = 12.dp)
+            .padding(vertical = 6.dp)
             .fillMaxWidth()
             .clickable(
                 onClick = { onPostClick(post) }
